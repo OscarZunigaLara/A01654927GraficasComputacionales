@@ -97,7 +97,7 @@ function update(context, canvas)
     const t1 = new triangulo(x1, y1, largo);
     t1.draw(context);
 
-    var recur = 0;
+    var recur = 0; 
     dibujarTriangulitosArriba(context, x1, y1, largo,t1.height, recur);
   
     
