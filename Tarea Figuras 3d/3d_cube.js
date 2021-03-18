@@ -436,12 +436,48 @@ function  createoctahedron (gl, translation, rotationAxis)
     vertexBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
        let verts = [
-        1.0, 0.0, 0.0,
-        0.0, 1.0, 0.0,
-        0.0, 0.0, 1.0,
-        0.0, -1.0, 0.0,
-        0.0, 0.0, -1.0,
-        -1.0, 0.0, 0.0,
+        /*
+        1.0, 0.0, 0.0,      //arriba
+        0.0, 1.0, 0.0,      //1
+        0.0, 0.0, 1.0,      //2
+        0.0, -1.0, 0.0,     //3
+        0.0, 0.0, -1.0,     //4   
+        -1.0, 0.0, 0.0,     //abajo
+        */
+        1.0, 0.0, 0.0,      //arriba
+        0.0, 1.0, 0.0,      //1
+        0.0, 0.0, 1.0,      //2
+
+        1.0, 0.0, 0.0,      //arriba
+        0.0, 0.0, 1.0,      //2
+        0.0, -1.0, 0.0,     //3
+
+        1.0, 0.0, 0.0,      //arriba
+        0.0, -1.0, 0.0,     //3
+        0.0, 0.0, -1.0,     //4  
+
+        1.0, 0.0, 0.0,      //arriba
+        0.0, 0.0, -1.0,     //4 
+        0.0, 1.0, 0.0,      //1
+
+        -1.0, 0.0, 0.0,     //abajo
+        0.0, 1.0, 0.0,      //1
+        0.0, 0.0, 1.0,      //2
+
+        -1.0, 0.0, 0.0,     //abajo
+        0.0, 0.0, 1.0,      //2
+        0.0, -1.0, 0.0,     //3
+
+        -1.0, 0.0, 0.0,     //abajo
+        0.0, -1.0, 0.0,     //3
+        0.0, 0.0, -1.0,     //4  
+
+        -1.0, 0.0, 0.0,     //abajo
+        0.0, 0.0, -1.0,     //4 
+        0.0, 1.0, 0.0,      //1
+
+        
+
     ];
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verts), gl.STATIC_DRAW);
     // Color data
@@ -452,7 +488,7 @@ function  createoctahedron (gl, translation, rotationAxis)
         [0.0,  1.0,  0.0,  1.0],    // Top face: green
         [0.0,  0.0,  1.0,  1.0],    // Bottom face: blue
         [1.0,  1.0,  0.0,  1.0],    // Right face: yellow
-        [1.0,  0.0,  1.0,  1.0],    // Left face: purple
+        
     ];
     // Each vertex must have the color information, that is why the same color is concatenated 4 times, one for each vertex of the cube's face.
     let vertexColors = [];
@@ -462,7 +498,7 @@ function  createoctahedron (gl, translation, rotationAxis)
     //         vertexColors.push(...color);
     // }
     faceColors.forEach(color =>{
-        for (let j=0; j < 1; j++)
+        for (let j=0; j < 6; j++)
             vertexColors.push(...color);
     });
     console.log(faceColors)
@@ -471,14 +507,24 @@ function  createoctahedron (gl, translation, rotationAxis)
     let cubeIndexBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeIndexBuffer);
     let Inidices = [
-       0, 1, 2, 
+      /*
+        0, 1, 2, 
        0, 2, 3, 
        0, 3, 4, 
        0, 4, 1, 
        5, 1, 2, 
        5, 2, 3, 
        5, 3, 4, 
-       5, 1, 4,
+       5, 1, 4
+       */
+      0,1,2,
+      3,4,5,
+      6,7,8,
+      9,10,11,
+      12,13,14,
+      15,16,17,
+      18,19,20,
+      21,22,23
     ];
     // gl.ELEMENT_ARRAY_BUFFER: Buffer used for element indices.
     // Uint16Array: Array of 16-bit unsigned integers.
@@ -486,7 +532,7 @@ function  createoctahedron (gl, translation, rotationAxis)
     
     let octaedro = {
             buffer: vertexBuffer, colorBuffer:colorBuffer, indices:cubeIndexBuffer,
-            vertSize:3, nVerts:6, colorSize:4, nColors: 20, nIndices:24,
+            vertSize:3, nVerts:24, colorSize:4, nColors: 20, nIndices:24,
             primtype:gl.TRIANGLES, modelViewMatrix: mat4.create(), currentTime : Date.now(), counter:0,up:true
         };
     mat4.translate(octaedro.modelViewMatrix, octaedro.modelViewMatrix, translation);
@@ -536,7 +582,6 @@ function createShader(gl, str, type)
     } else {
         return null;
     }
-
     gl.shaderSource(shader, str);
     gl.compileShader(shader);
 
@@ -621,3 +666,5 @@ function run(gl, objs)
     for(i = 0; i<objs.length; i++)
         objs[i].update();
 }
+
+
