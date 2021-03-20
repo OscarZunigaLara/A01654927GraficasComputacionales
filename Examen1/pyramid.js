@@ -224,7 +224,7 @@ function createPyramid(gl, translation, rotationAxis, scale, color)
         
         //mat4.rotate(this.modelViewMatrix, this.modelViewMatrix, [angle, 0, 0], rotationAxis);
 
-        //mat4.rotate(this.modelViewMatrix, this.modelViewMatrix, angle, rotationAxis);
+        mat4.rotate(this.modelViewMatrix, this.modelViewMatrix, angle, rotationAxis);
         
 	};
 
@@ -306,9 +306,10 @@ function dibujarTriangulitosArriba2(glCtx,listaPiramides, x1, y1, z1,  largo ,re
             color +=1
         }
         height = largo * (Math.sqrt(3)/2)
-        dibujarTriangulitosArriba2(glCtx,listaPiramides,x1, y1 + height /2 , z1 ,largo/2 ,recur + 1,);
-        dibujarTriangulitosArriba2(glCtx,listaPiramides,x1 - largo/4,y1, z1 ,largo/2 ,recur + 1);
-        dibujarTriangulitosArriba2(glCtx,listaPiramides,x1 + largo/4,y1, z1 ,largo/2 ,recur + 1);
+        dibujarTriangulitosArriba2(glCtx,listaPiramides,x1, y1 - height /2 , z1 - height /2,largo/2 ,recur + 1,);
+        dibujarTriangulitosArriba2(glCtx,listaPiramides,x1,y1 + largo /4, z1 ,largo/2 ,recur + 1);
+
+        dibujarTriangulitosArriba2(glCtx,listaPiramides,x1 - largo /4, y1, z1  ,largo/2 ,recur + 1);
     }
 
 }
@@ -336,14 +337,16 @@ function main()
 
     largo = 1
     recur =1
-    dibujarTriangulitosArriba2(glCtx, listaPiramides2, .5, .9, -3,largo, recur, 0)
+    dibujarTriangulitosArriba2(glCtx, listaPiramides2, .5, .82, -3,largo, recur, 0)
 
 
     for(i = 0; i<listaPiramides.length; i++){
         //console.log(i)
         listaPiramides[i].rotate(   [0, 2,0], 0); 
 
-        listaPiramides2[i].rotate([0,2,0],3 )
+        listaPiramides2[i].rotate([1,2,0], 1.0472)
+        listaPiramides2[i].rotate([0,2,0], 1.0472)
+        listaPiramides2[i].rotate([0,0,2], 1.0472)
 
 
     }
