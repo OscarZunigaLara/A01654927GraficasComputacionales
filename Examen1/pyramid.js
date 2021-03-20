@@ -207,7 +207,6 @@ function createPyramid(gl, translation, rotationAxis, scale, color)
         mat4.translate(pyramid.modelViewMatrix, pyramid.modelViewMatrix, translation);
         mat4.scale(pyramid.modelViewMatrix, pyramid.modelViewMatrix, scale);
 
-
         pyramid.update = function()
     {
         //console.log("update pyramid")
@@ -230,7 +229,7 @@ function createPyramid(gl, translation, rotationAxis, scale, color)
     //console.log(verts)
 
 
-
+    console.log(pyramid)
     return pyramid;
 }
 
@@ -272,7 +271,6 @@ function dibujarTriangulitosArriba(glCtx,listaPiramides, x1, y1, z1,  largo ,rec
         }
         height = largo * (Math.sqrt(3)/2)
         dibujarTriangulitosArriba(glCtx,listaPiramides,x1, y1 + height /2 , z1 ,largo/2 ,recur + 1,);
-
         dibujarTriangulitosArriba(glCtx,listaPiramides,x1 - largo/4,y1, z1 ,largo/2 ,recur + 1);
         dibujarTriangulitosArriba(glCtx,listaPiramides,x1 + largo/4,y1, z1 ,largo/2 ,recur + 1);
     }
