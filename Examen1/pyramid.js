@@ -6,7 +6,6 @@ let shaderVertexPositionAttribute = null, shaderVertexColorAttribute = null, sha
 
 let duration = 10000;
 
-let cantidadTriangle = 3
 
 let vertexShaderSource = `
 
@@ -155,23 +154,24 @@ function draw(gl, objs)
 }
 
 
-function createPyramid(gl, translation, rotationAxis) 
-{
+function createPyramid(gl, translation, rotationAxis, scale, color) 
+{   
     recur = 0;
-
-    console.log("Pyramid created")
+    //console.log(altura)
+    //console.log("Pyramid created")
     vertexBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+    largo = 2
+    height = largo * (Math.sqrt(3)/2)
 
     let verts = [
-        0, 1, 0,
-        -1,0,0,
+        0, height, 0,
         1,0,0,
+        -1,0,0,
     ];
-
-
-    console.log(verts)
-    console.log(verts.length);
+    
+    //console.log(verts)
+    //console.log(verts.length);
 
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verts), gl.STATIC_DRAW);
 
@@ -180,9 +180,7 @@ function createPyramid(gl, translation, rotationAxis)
     gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
 
     let faceColors = [
-        [1.0, 0.0, 0.0, 1.0], // Front face
-        [0.0, 1.0, 0.0, 1.0], // Back face
-        [0.0, 0.0, 1.0, 1.0], // Top face
+       color
     ]
     let vertexColors = [];
     faceColors.forEach(color =>{
@@ -202,12 +200,15 @@ function createPyramid(gl, translation, rotationAxis)
     
     let pyramid = {
             buffer: vertexBuffer, colorBuffer:colorBuffer, indices:cubeIndexBuffer,
-            vertSize:3, nVerts:verts.length, colorSize:4, nColors: 12, nIndices:3,
+            vertSize:3, nVerts:verts.length, colorSize:4, nColors: 12, nIndices:cubeIndices.length,
             primtype:gl.TRIANGLES, modelViewMatrix: mat4.create(), currentTime : Date.now()
         };
 
         mat4.translate(pyramid.modelViewMatrix, pyramid.modelViewMatrix, translation);
-    pyramid.update = function()
+        mat4.scale(pyramid.modelViewMatrix, pyramid.modelViewMatrix, scale);
+
+
+        pyramid.update = function()
     {
         //console.log("update pyramid")
         let now = Date.now();
@@ -222,8 +223,14 @@ function createPyramid(gl, translation, rotationAxis)
         // Number rad the angle to rotate the matrix by
         // vec3 axis the axis to rotate around
         mat4.rotate(this.modelViewMatrix, this.modelViewMatrix, angle, rotationAxis);
+        
 	};
-    
+
+    console.log(pyramid.modelViewMatrix)
+    //console.log(verts)
+
+
+
     return pyramid;
 }
 
@@ -233,62 +240,62 @@ function run(glCtx, objs)
     //console.log(objs)
     draw(glCtx, objs);
 
+
+
+
     for(i = 0; i<objs.length; i++)
         //console.log(i)
         objs[i].update();
 }
 
 
-function dibujarTriangulitosArriba(verts, x1, y1, largo, height, recur){
+let color = 0;
+let colors = [
+    [1.0, 0.0, 0.0, 1.0],    //
+    [0.0, 1.0, 0.0, 1.0],    //
+    [0.0, 0.0, 1.0, 1.0],    //
+    [1.0, 0.0, 1.0, 1.0],    //
+    [0.0, 1.0, 1.0, 1.0],    //
 
-    if (recur <= cantidadTriangle){
-        verts.push(x1);
-        verts.push(y1);
-        verts.push(largo/2)
-        console.log(verts)
-        dibujarTriangulitosArriba(verts, y1, largo /2 ,height/2 , recur + 1);
-        dibujarTriangulitosArriba(verts + largo /4, y1 + height /2 , largo /2, height/2, recur + 1);
-        dibujarTriangulitosArriba(verts, x1 - largo /4, y1 + height /2 , largo /2, height/2, recur + 1);
+];
+
+
+function dibujarTriangulitosArriba(glCtx,listaPiramides, x1, y1, z1,  largo ,recur){     
+    if (color >= colors.length ){
+        color = 0;
+    }
+    if (recur < cantidadTriangle){
+        if (recur == cantidadTriangle -1){
+            nuevoTriangulo = createPyramid(glCtx, [x1, y1, z1],     [0, 2,0],   [1/(2 ** recur), 1/(2 ** recur), 1/(2 ** recur)], colors[color]);
+            listaPiramides.push(nuevoTriangulo)
+            color +=1
+        }
+        height = largo * (Math.sqrt(3)/2)
+        dibujarTriangulitosArriba(glCtx,listaPiramides,x1, y1 + height /2 , z1 ,largo/2 ,recur + 1,);
+
+        dibujarTriangulitosArriba(glCtx,listaPiramides,x1 - largo/4,y1, z1 ,largo/2 ,recur + 1);
+        dibujarTriangulitosArriba(glCtx,listaPiramides,x1 + largo/4,y1, z1 ,largo/2 ,recur + 1);
     }
 }
 
-function dibujarTriangulitosArriba(glCtx,listaPiramides, x1, y1, largo, height, recur){
 
-    if (recur <= cantidadTriangle){
-        nuevoTriangulo = createPyramid(glCtx, [x1, y1, -3], [0, 0, 0]);
-        console.log("asdfasd ", recur);
-        listaPiramides.push(nuevoTriangulo)
-        dibujarTriangulitosArriba(glCtx,listaPiramides,x1 ,y1, largo /2 ,height/2 , recur + 1);
-        dibujarTriangulitosArriba(glCtx,listaPiramides, x1 + largo /4, y1 + height /2 , largo /2, height/2, recur + 1);
-        dibujarTriangulitosArriba(glCtx, listaPiramides, x1 - largo /4, y1 + height /2 , largo /2, height/2, recur + 1);
-    }
-}
-
+let cantidadTriangle = 5
 
 
 function main()
 {
-
     let canvas = document.getElementById("pyramidCanvas");
-
     let glCtx = initWebGL(canvas);
-
     initViewport(glCtx, canvas);
     initGL(glCtx, canvas);
-
-    let pyramid = createPyramid(glCtx, [0, 1, -3], [0, 0, 0]);
-
     listaPiramides = []
-    listaPiramides.push(pyramid);
-
-    largo = 2
-    height = 2
-    recur =0
-    dibujarTriangulitosArriba(glCtx, listaPiramides, 0, 0, largo, height, recur)
-    console.log(listaPiramides)
-
-
+    largo = 1
+    height = largo * (Math.sqrt(3)/2)
+    recur =1
+    dibujarTriangulitosArriba(glCtx, listaPiramides, 0, 0, -3,largo, recur, 0)
     initShader(glCtx, vertexShaderSource, fragmentShaderSource);
-    console.log(pyramid)
+    console.log(listaPiramides.length)
+
+    //mat4.rotate(listaPiramides, .6)
     run(glCtx, listaPiramides);
 }
