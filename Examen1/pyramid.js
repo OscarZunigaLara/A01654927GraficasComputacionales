@@ -224,7 +224,7 @@ function createPyramid(gl, translation, rotationAxis, scale, color)
         
         //mat4.rotate(this.modelViewMatrix, this.modelViewMatrix, [angle, 0, 0], rotationAxis);
 
-        //mat4.rotate(this.modelViewMatrix, this.modelViewMatrix, angle, rotationAxis);
+        mat4.rotate(this.modelViewMatrix, this.modelViewMatrix, angle, rotationAxis);
         
 	};
 
@@ -315,6 +315,44 @@ function dibujarTriangulitosArriba2(glCtx,listaPiramides, x1, y1, z1,  largo ,re
 }
 
 
+function dibujarTriangulitosArriba3(glCtx,listaPiramides, x1, y1, z1,  largo ,recur){     
+    if (color >= colors.length ){
+        color = 0;
+    }
+    if (recur < cantidadTriangle){
+        if (recur == cantidadTriangle -1){
+            nuevoTriangulo = createPyramid(glCtx, [x1, y1, z1],     [0, 2,0],   [1/(2 ** recur), 1/(2 ** recur), 1/(2 ** recur)], colors[color]);
+            listaPiramides.push(nuevoTriangulo)
+            color +=1
+        }
+        height = largo * (Math.sqrt(3)/2)
+        dibujarTriangulitosArriba3(glCtx,listaPiramides,x1, y1 - height /2 , z1 - height /2,largo/2 ,recur + 1,);
+        dibujarTriangulitosArriba2(glCtx,listaPiramides,x1,y1 + largo /4, z1 ,largo/2 ,recur + 1);
+
+        dibujarTriangulitosArriba3(glCtx,listaPiramides,x1 - largo /4, y1, z1  ,largo/2 ,recur + 1);
+    }
+
+}
+
+
+function dibujarTriangulitosArriba4(glCtx,listaPiramides, x1, y1, z1,  largo ,recur){     
+    if (color >= colors.length ){
+        color = 0;
+    }
+    if (recur < cantidadTriangle){
+        if (recur == cantidadTriangle -1){
+            nuevoTriangulo = createPyramid(glCtx, [x1, y1, z1],     [0, 2,0],   [1/(2 ** recur), 1/(2 ** recur), 1/(2 ** recur)], colors[color]);
+            listaPiramides.push(nuevoTriangulo)
+            color +=1
+        }
+        height = largo * (Math.sqrt(3)/2)
+        dibujarTriangulitosArriba1(glCtx,listaPiramides,x1, y1 + height /2 , z1 + height /2 ,largo/2 ,recur + 1,);
+        dibujarTriangulitosArriba1(glCtx,listaPiramides,x1 - largo/4,y1, z1 + height/2 ,largo/2 ,recur + 1);
+        dibujarTriangulitosArriba1(glCtx,listaPiramides,x1 + largo/4,y1, z1 + height/2 ,largo/2 ,recur + 1);
+    }
+
+}
+
 
 
 let cantidadTriangle = 5
@@ -340,6 +378,20 @@ function main()
     dibujarTriangulitosArriba2(glCtx, listaPiramides2, .53, .82, -3,largo, recur, 0)
 
 
+    listaPiramides3 = []
+
+    largo = 1
+    recur =1
+    dibujarTriangulitosArriba2(glCtx, listaPiramides3, -.53, .82, -3,largo, recur, 0)
+
+
+
+    listaPiramides4 = []
+
+    largo = 1
+    recur =1
+    dibujarTriangulitosArriba4(glCtx, listaPiramides4, 0, 0, -3,largo, recur, 0)
+
     for(i = 0; i<listaPiramides.length; i++){
         //console.log(i)
         listaPiramides[i].rotate(   [0, 2,0], 0); 
@@ -349,10 +401,24 @@ function main()
         listaPiramides2[i].rotate([0,0,2], 1)
 
 
+        
+        listaPiramides3[i].rotate([1,2,0], 1)
+        listaPiramides3[i].rotate([0,2,0], 1)
+        listaPiramides3[i].rotate([0,0,2], 1)
+
+        listaPiramides4[i].rotate([0,2,0], 1)
+        //listaPiramides4[i].rotate([0,2,0], 1)
+        //listaPiramides4[i].rotate([0,0,2], 1)
+
+
+
     }
 
     for(i = 0; i<listaPiramides2.length; i++){
         listaPiramides.push(listaPiramides2[i])   
+        listaPiramides.push(listaPiramides3[i])   
+        listaPiramides.push(listaPiramides4[i])
+
     }
 
 
