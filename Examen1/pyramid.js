@@ -327,7 +327,7 @@ function dibujarTriangulitosArriba3(glCtx,listaPiramides, x1, y1, z1,  largo ,re
         }
         height = largo * (Math.sqrt(3)/2)
         dibujarTriangulitosArriba3(glCtx,listaPiramides,x1, y1 - height /2 , z1 - height /2,largo/2 ,recur + 1,);
-        dibujarTriangulitosArriba2(glCtx,listaPiramides,x1,y1 + largo /4, z1 ,largo/2 ,recur + 1);
+        dibujarTriangulitosArriba2(glCtx,listaPiramides,x1,y1 - largo /4, z1 ,largo/2 ,recur + 1);
 
         dibujarTriangulitosArriba3(glCtx,listaPiramides,x1 - largo /4, y1, z1  ,largo/2 ,recur + 1);
     }
