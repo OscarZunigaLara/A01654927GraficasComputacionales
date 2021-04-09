@@ -92,13 +92,14 @@ function reset(){
     //let cubeGroup = new THREE.Object3D;
     //createScene(canvas)
     console.log(scene.children)
-    scene.children.splice('Object3D')
 
     //for (i in scene.children){
         //if ((scene.children[i].type) == 'Object3D'){
             //console.log(scene.children[i].type)        
         //}
     //}
+    scene.children.splice('Object3D')
+
     let light = new THREE.DirectionalLight( 0xffffff, 1.0);
 
     // Position the light out from the scene, pointing at the origin
