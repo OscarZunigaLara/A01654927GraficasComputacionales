@@ -1,0 +1,44 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>Three.js Scene Graph</title>
+
+		<link rel="stylesheet" href="../css/main.css" />
+		<link rel="stylesheet" href="../css/threejsscene.css" />
+
+        <script src="../libs/three.js/three.js"></script>
+		<script src="../libs/three.js/controls/OrbitControls.js"></script>
+
+
+		<!---<script src="sceneHandlers.js"></script> -->
+		<script src="threejsscene.js"></script>
+
+
+	</head>
+	<body onload="main()"> 
+
+		<div id="container">
+			<canvas id="webglcanvas" width=800 height=600></canvas>
+			<div id="title">
+				Three.js Scene Graph/Transform Hierarchy
+			</div>
+			<div id="prompt">
+				Drag the mouse to rotate the scene<br>Drag the slider to scale.
+			</div>
+			<div id="status">
+				<div id="rotation">rotation: 0,0,0</div>
+				<div id="scale">scale: 1</div>
+			</div>
+		</div>
+        
+	</body>
+<style>
+	#buttons{
+	position: absolute;
+	top: 620px;
+	textalign:center;
+	}
+	
+</style>
+
+</html>
