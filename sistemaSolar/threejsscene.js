@@ -79,6 +79,7 @@ function main() {
     createMoons(mars);
     createMoons(mars);
 
+    createOrbit(sun, 36);
     ///crear cinturon asteroides
     for (i= 0; i<= 150; i++){
         //console.log("Asteroids")
@@ -136,20 +137,23 @@ function animate()
     currentTime = now;
     let fract = deltat / duration;
     let angle = Math.PI * 2 * fract;
-    angle = angle/4
+    angle = angle/8
     // Rotate the cube about its Y axis
     //cube.rotation.y += angle;
-    sun.rotation.y += angle * 1.7;
+    
+    //rotation
+    sun.rotation.y += angle * 2;
     mercury.rotation.y += angle * 3;
-    venus.rotation.y += angle * 2;
-    earth.rotation.y += angle;
-    mars.rotation.y += angle /3;
-    jupiter.rotation.y += angle /2;
-    saturn.rotation.y += angle / 3;
-    neptune.rotation.y += angle / 2;
-    uranus.rotation.y += angle / 2.4;
-    pluto.rotation.y += angle /2;
+    venus.rotation.y += angle * 3;
+    earth.rotation.y += angle * 5;
+    mars.rotation.y += angle * 3;
+    jupiter.rotation.y += angle * 3;
+    saturn.rotation.y += angle * 3;
+    neptune.rotation.y += angle * 2;
+    uranus.rotation.y += angle * 2.4;
+    pluto.rotation.y += angle *2;
 
+    ///rotation around the sun
     sunMercury.rotation.y += angle * 6
     sunVenus.rotation.y += angle * 5
     sunEarth.rotation.y += angle * 4
@@ -159,13 +163,27 @@ function animate()
     sunNeptune.rotation.y += angle * .8
     sunUranus.rotation.y += angle *.7
     sunPluto.rotation.y += angle * .5
-
+    
     for (i in asteroidList){
        //console.log(figureList[i])
        //figureList[i].rotation.y += angle;
        asteroidList[i].rotation.y += angle * 4;
     }
 
+    //Earth and mars moon rotatio.
+    for (i in moonList){
+       //console.log(monnList[i])
+       //figureList[i].rotation.y += angle;
+       moonList[i].rotation.y += angle * 6;
+    }
+
+    //Jupiter, saturn, uraus and neptune moons.
+    moonJupiterList
+    for (i in moonJupiterList){
+        //console.log(monnList[i])
+        //figureList[i].rotation.y += angle;
+        moonJupiterList[i].rotation.y += angle * 10;
+     }
     // Rotate the sphere group about its Y axis
 }
 function run() {
@@ -179,7 +197,7 @@ function run() {
     animate();
 }
 
-
+///fake sun, used for rotation of the planets at different speeds.
 function createSmallerSun(){
     const material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
     let geometry = new THREE.SphereGeometry(1, 32, 32);
@@ -197,7 +215,7 @@ function createSmallerSun(){
     return smallSun;
 }
 
-
+//real sun
 function createSun(x, y, z){
     console.log("Creating Sun")
 
@@ -246,6 +264,8 @@ function createMercury(father){
 
     let mercuryTextureUrl = "textures/8k_mercury.jpg"
     let mercuryTexture = new THREE.TextureLoader().load(mercuryTextureUrl);
+    
+    //bump map
     let mercuryBumpURL = "textures/mercurybump.jpg"    
     let mercuryBumpTexture = new THREE.TextureLoader().load(mercuryBumpURL);
     
@@ -317,6 +337,8 @@ function createVenus(father){
 
     let venusTextureUrl = "textures/venusmap.jpg"
     let venusTexture = new THREE.TextureLoader().load(venusTextureUrl);
+    
+    //bump map
     let venusBumpURL = "textures/venusbump.jpg"    
     let venusBumpTexture = new THREE.TextureLoader().load(venusBumpURL);
     
@@ -389,6 +411,8 @@ function createEarth(father){
 
     let earthTextureUrl = "textures/earthmap1k.jpg"
     let earthTexture = new THREE.TextureLoader().load(earthTextureUrl);
+    
+    //bump map
     let earthBumpURL = "textures/earthbump1k.jpg"    
     let earthBumpTexture = new THREE.TextureLoader().load(earthBumpURL);
     let especularEarthUrl = "textures/earthspec1k"
@@ -404,9 +428,7 @@ function createEarth(father){
 
 
     totalDistance = 26;
-    //totalDistance += random(-10, 10)/10
-    //console.log(totalDistance)
-    //console.log(x, y, z)
+  
 
     x = Math.sqrt(random(0, (totalDistance * totalDistance)));
     y = 0;
@@ -420,9 +442,8 @@ function createEarth(father){
     random_boolean = Math.random() < 0.5;
     if (random_boolean){
         z = -z
-    }    //totalDistance += random(-10, 10)/10
-    //console.log(totalDistance)
-    //console.log(x, y, z)
+    }   
+
 
     x = Math.sqrt(random(0, (totalDistance * totalDistance)));
     y = 0;
@@ -462,8 +483,10 @@ function createMars(father){
 
     let marsTextureUrl = "textures/mars_1k_color.jpg"
     let marsTexture = new THREE.TextureLoader().load(marsTextureUrl);
+    //bumpMap
     let marsBumpURL = "textures/marsbump1k.jpg"    
     let marsBumpTexture = new THREE.TextureLoader().load(marsBumpURL);
+    //normal
     let marsNormalURL = "textures/mars_1k_normal.jpg"
     let marsNormalTexture = new THREE.TextureLoader().load(marsNormalURL);
     //let especularEarthUrl = "textures/earthspec1k"
@@ -477,12 +500,8 @@ function createMars(father){
         normalMap: marsNormalTexture
         
     });
-
-
     totalDistance = 30;
-    //totalDistance += random(-10, 10)/10
-    //console.log(totalDistance)
-    //console.log(x, y, z)
+
 
     x = Math.sqrt(random(0, (totalDistance * totalDistance)));
     y = 0;
@@ -740,10 +759,13 @@ function createPluto(father){
     console.log("Creating pluto")
     let uranusTextureUrl = "textures/uranusmap.jpg"
     let uranusTexture = new THREE.TextureLoader().load(uranusTextureUrl);
-  
+
+    let plutoBump = "textures/plutobump1k.jpg"
+    let plutoBumpTexture = new THREE.TextureLoader().load(plutoBump)
     
     let uranusMaterial = new THREE.MeshPhongMaterial({ 
         map: uranusTexture,
+        bumpMap: plutoBumpTexture
     });
 
     totalDistance = 76;
@@ -877,6 +899,7 @@ function createJupiterMoons(father){
     newGroup.updateMatrixWorld();
    return moon
 }
+
 function createAsteroids(father){
     console.log("Creating Asteroid")
     let moonTextureURL = "textures/moonmap1k.jpg"
@@ -927,7 +950,7 @@ function createAsteroids(father){
 
 }
 
-
+///saturn ring stretched
 function createOrbit(sun, radius){
     let saturnRigColorTextureURL = "textures/saturnringcolor.jpg"
     let saturnRigColorTexture = new THREE.TextureLoader().load(saturnRigColorTextureURL);
